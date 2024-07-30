@@ -9,7 +9,7 @@ import train_model
 app = dash.Dash(__name__)
 
 # 讀取數據並提取日期範圍
-data = pd.read_csv('1234.csv')
+data = pd.read_csv('2330.csv')
 data['Date'] = pd.to_datetime(data['Date'])
 min_date = data['Date'].min()
 max_date = data['Date'].max()
@@ -38,7 +38,7 @@ app.layout = html.Div(
             style={'border': '2px solid green', 'padding': '10px', 'margin': '10px 0'},
             children=[
                 html.Label('股票代碼:', style={'margin-right': '10px'}),
-                dcc.Input(id='stock-code', type='text', value='1234', style={'margin-right': '20px'})
+                dcc.Input(id='stock-code', type='text', value='2330', style={'margin-right': '20px'})
             ]
         ),
         html.Div(
