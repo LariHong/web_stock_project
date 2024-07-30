@@ -4,10 +4,11 @@ import pandas as pd
 import plotly.graph_objs as go
 from datetime import timedelta
 import numpy as np
+import train_model
 
 app = dash.Dash(__name__)
 
-# 读取数据并提取日期范围
+# 讀取數據並提取日期範圍
 data = pd.read_csv('1234.csv')
 data['Date'] = pd.to_datetime(data['Date'])
 min_date = data['Date'].min()
@@ -16,7 +17,7 @@ max_date = data['Date'].max()
 def generate_date_options(start_date, end_date):
     years = range(start_date.year, end_date.year + 1)
     months = range(1, 13)
-    days = range(1, 32)  # 默认最多31天
+    days = range(1, 32)  # 默認最多31天
 
     year_options = [{'label': str(year), 'value': year} for year in years]
     month_options = [{'label': f'{month:02}', 'value': month} for month in months]
@@ -30,13 +31,13 @@ app.layout = html.Div(
     style={'width': '80%', 'margin': 'auto', 'border': '2px solid black'},
     children=[
         html.Div(
-            children=html.H1("预测台股"),
+            children=html.H1("預測台股"),
             style={'textAlign': 'center', 'padding': '10px'}
         ),
         html.Div(
             style={'border': '2px solid green', 'padding': '10px', 'margin': '10px 0'},
             children=[
-                html.Label('股票代码:', style={'margin-right': '10px'}),
+                html.Label('股票代碼:', style={'margin-right': '10px'}),
                 dcc.Input(id='stock-code', type='text', value='1234', style={'margin-right': '20px'})
             ]
         ),
@@ -49,29 +50,29 @@ app.layout = html.Div(
                         html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'width': '100%'},
                             children=[
-                                html.Label('开始年:', style={'margin-right': '10px'}),
+                                html.Label('開始年:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='start-year-dropdown',
                                     options=year_options,
                                     value=min_date.year,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px', 'margin-right': '10px'}  # 设置宽度和间距
+                                    clearable=False,
+                                    style={'width': '100px', 'margin-right': '10px'}
                                 ),
-                                html.Label('开始月:', style={'margin-right': '10px'}),
+                                html.Label('開始月:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='start-month-dropdown',
                                     options=month_options,
                                     value=min_date.month,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px', 'margin-right': '10px'}  # 设置宽度和间距
+                                    clearable=False,
+                                    style={'width': '100px', 'margin-right': '10px'}
                                 ),
-                                html.Label('开始日:', style={'margin-right': '10px'}),
+                                html.Label('開始日:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='start-day-dropdown',
                                     options=day_options,
                                     value=min_date.day,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px'}  # 设置宽度
+                                    clearable=False,
+                                    style={'width': '100px'}
                                 ),
                             ]
                         )
@@ -83,29 +84,29 @@ app.layout = html.Div(
                         html.Div(
                             style={'display': 'flex', 'align-items': 'center', 'width': '100%'},
                             children=[
-                                html.Label('结束年:', style={'margin-right': '10px'}),
+                                html.Label('結束年:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='end-year-dropdown',
                                     options=year_options,
                                     value=max_date.year,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px', 'margin-right': '10px'}  # 设置宽度和间距
+                                    clearable=False,
+                                    style={'width': '100px', 'margin-right': '10px'}
                                 ),
-                                html.Label('结束月:', style={'margin-right': '10px'}),
+                                html.Label('結束月:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='end-month-dropdown',
                                     options=month_options,
                                     value=max_date.month,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px', 'margin-right': '10px'}  # 设置宽度和间距
+                                    clearable=False,
+                                    style={'width': '100px', 'margin-right': '10px'}
                                 ),
-                                html.Label('结束日:', style={'margin-right': '10px'}),
+                                html.Label('結束日:', style={'margin-right': '10px'}),
                                 dcc.Dropdown(
                                     id='end-day-dropdown',
                                     options=day_options,
                                     value=max_date.day,
-                                    clearable=False,  # 禁用清除功能
-                                    style={'width': '100px'}  # 设置宽度
+                                    clearable=False,
+                                    style={'width': '100px'}
                                 ),
                             ]
                         )
@@ -133,7 +134,7 @@ app.layout = html.Div(
                     style={'display': 'flex', 'justify-content': 'space-around', 'padding': '10px'},
                     children=[
                         html.Div(
-                            html.Label('热力图:', style={'margin-right': '10px'}),
+                            html.Label('熱力圖:', style={'margin-right': '10px'}),
                         )
                     ]
                 ),
@@ -155,29 +156,45 @@ app.layout = html.Div(
                                 dcc.RadioItems(
                                     id='analysis-radio',
                                     options=[
-                                        {'label': '分类', 'value': 'classification'},
-                                        {'label': '回归', 'value': 'regression'}
+                                        {'label': '分類', 'value': 'classification'},
+                                        {'label': '回歸', 'value': 'regression'}
                                     ],
                                     value='classification',
                                     labelStyle={'display': 'inline-block', 'margin-right': '10px'}
                                 ),
                                 dcc.Dropdown(
                                     id='feature-dropdown',
-                                    options=[{'label': f'Feature {i}', 'value': f'feature_{i}'} for i in range(1, 11)],
-                                    value='feature_1'
+                                    value='決策樹(C)',
+                                    clearable=False,
                                 )
                             ]
                         )
                     ]
                 ),
+                html.Div(id='model-info', style={ 'padding': '10px', 'width': '80%', 'margin-left': '10px'}),
                 html.Div(
-                    children=[dcc.Graph(id='analysis-chart')],
+                    children=[
+                        dcc.Graph(id='analysis-chart', style={'width': '70%'})
+                    ],
                     style={'border': '2px solid brown', 'padding': '10px'}
                 )
             ]
         )
     ]
 )
+
+@app.callback(
+    Output('feature-dropdown', 'options'),
+    Input('analysis-radio', 'value')
+)
+def update_feature_dropdown(selected_analysis):
+    if selected_analysis == 'regression':
+        regression_model=['決策樹(R)','Linear_regression','C']
+        return [{'label': f'{i}', 'value': f'{i}'} for i in regression_model]
+    else:  # classification
+        classification_model=['決策樹(C)','Logisticregression','G']
+        return [{'label': f'{i}', 'value': f'{i}'} for i in classification_model]
+
 
 @app.callback(
     Output('k-line-chart', 'figure'),
@@ -237,9 +254,9 @@ def create_candlestick_chart(data):
         line=dict(color='red', width=1, dash='dash')
     ))
     fig.update_layout(
-        title='K线图与折线图',
+        title='K線圖與折線圖',
         xaxis_title='日期',
-        yaxis_title='价格',
+        yaxis_title='價格',
         xaxis_rangeslider_visible=False,
         autosize=True
     )
@@ -269,7 +286,7 @@ def create_macd_chart(data):
         opacity=0.7
     ))
     fig.update_layout(
-        title='MACD Chart',
+        title='MACD 圖',
         xaxis_title='日期',
         yaxis_title='MACD',
         autosize=True
@@ -277,7 +294,7 @@ def create_macd_chart(data):
     return fig
 
 def create_heatmap_chart(data):
-    # 示例数据和生成方式，替换为实际的数据处理
+    # 示例數據和生成方式，替換為實際的數據處理
     corr_matrix = data.iloc[:, 1:].corr()
     
     fig = go.Figure(data=go.Heatmap(
@@ -288,23 +305,67 @@ def create_heatmap_chart(data):
     ))
     
     fig.update_layout(
-        title='热力图',
-        xaxis_title='特征',
-        yaxis_title='特征',
+        title='熱力圖',
+        xaxis_title='特徵',
+        yaxis_title='特徵',
         autosize=True,
         xaxis=dict(
-            showgrid=True,  # 显示网格线
-            gridcolor='black',  # 网格线颜色
-            gridwidth=0.5  # 网格线宽度
+            showgrid=True,  # 顯示網格線
+            gridcolor='black',  # 網格線顏色
+            gridwidth=0.5  # 網格線寬度
         ),
         yaxis=dict(
-            showgrid=True,  # 显示网格线
-            gridcolor='black',  # 网格线颜色
-            gridwidth=0.5  # 网格线宽度
+            showgrid=True,  # 顯示網格線
+            gridcolor='black',  # 網格線顏色
+            gridwidth=0.5  # 網格線寬度
         )
     )
     
     return fig
 
+@app.callback(
+    [Output('analysis-chart', 'figure'),
+     Output('model-info', 'children')],
+    Input('feature-dropdown', 'value')
+)
+def update_analysis_chart(selected_model):
+    feature = ['Open', 'High', 'Low', 'Adj Close', 'EMA12']
+    
+    try:
+        if selected_model == "決策樹(R)":
+            mse, r2, y_predict, tolerance_percentage, correct_within_tolerance, fig = train_model.Decision_tree_Regressor(test_size=0.3, data=data, feature=feature)
+            info = f"均方誤差: {mse:.4f}\nR^2 分數: {r2:.4f}\n容忍百分比: {tolerance_percentage:.2%}\n容忍內正確率: {correct_within_tolerance:.2f}%"
+        elif selected_model == "Linear_regression":
+            mse, r2, y_predict, tolerance_percentage, correct_within_tolerance, fig = train_model.Linear_regression(test_size=0.3, data=data, feature=feature)
+            info = f"均方誤差: {mse:.4f}\nR^2 分數: {r2:.4f}\n容忍百分比: {tolerance_percentage:.2%}\n容忍內正確率: {correct_within_tolerance:.2f}%"
+        elif selected_model == "決策樹(C)":
+            score, y_predict, f1, fig = train_model.Decision_tree_Classifier(test_size=0.3, data=data, feature=feature)
+            info = f"準確率分數: {score:.4f}\nF1 分數: {f1:.4f}"
+        elif selected_model == "Logisticregression":
+            score, y_predict, f1, fig = train_model.Logisticregression(test_size=0.3, data=data, feature=feature)
+            info = f"準確率分數: {score:.4f}\nF1 分數: {f1:.4f}"
+        else:
+            fig = go.Figure()
+            fig.update_layout(
+                title='請選擇模型',
+                xaxis_title='',
+                yaxis_title='',
+                autosize=True
+            )
+            info = "請選擇有效的模型"
+        
+        return fig, html.Div(info, style={'white-space': 'pre-line', 'font-family': 'monospace'})
+    except Exception as e:
+        print(f"錯誤: {e}")
+        fig = go.Figure()
+        fig.update_layout(
+            title='錯誤',
+            xaxis_title='',
+            yaxis_title='',
+            autosize=True
+        )
+        info = f"發生錯誤: {e}"
+        return fig, html.Div(info, style={'white-space': 'pre-line', 'font-family': 'monospace'})
+
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8077)
