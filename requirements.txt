@@ -1,3 +1,15 @@
 dash
 dash_bootstrap_components
 flask
+pandas
+numpy
+requests
+pydantic
+pandas
+numpy
+ttkthemes
+tkintermapview
+matplotlib
+seaborn
+yfinance
+scikit-learn
