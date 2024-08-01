@@ -42,7 +42,11 @@ app.layout = html.Div([
 ], style={'fontFamily': 'Arial, sans-serif'})
 
 # Flask路由來提供LOGO圖片
+<<<<<<< HEAD
 @server.route('/image<path:path>')
+=======
+@server.route('/image/<path:path>')
+>>>>>>> 043028453de9a24c7c0405935a1e69f50f3f985a
 def serve_asset(path):
     return send_from_directory('image', path)
 
