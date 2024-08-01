@@ -14,7 +14,7 @@ app = dash.Dash(__name__, server=server, url_base_pathname='/')
 # 加載CSV文件並根據日期從最新到最舊排序
 df = pd.read_csv('2330.csv')
 df['Date'] = pd.to_datetime(df['Date'])  # 假設日期列名為' Date'
-df = df.sort_values(by='Date', ascending=False)
+df = df.sort_values(by='Date', ascending=False) 
 
 # Dash應用程序的佈局
 app.layout = html.Div([
