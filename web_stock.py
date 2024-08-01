@@ -6,7 +6,7 @@ from datetime import timedelta
 import numpy as np
 import train_model
 
-app = dash.Dash(__name__)
+app1 = dash.Dash(__name__,requests_pathname_prefix='/tech/')
 
 # 讀取數據並提取日期範圍
 data = pd.read_csv('2330.csv')
@@ -27,7 +27,7 @@ def generate_date_options(start_date, end_date):
 
 year_options, month_options, day_options = generate_date_options(min_date, max_date)
 
-app.layout = html.Div(
+app1.layout = html.Div(
     style={'width': '80%', 'margin': 'auto', 'border': '2px solid black'},
     children=[
         html.Div(
@@ -183,20 +183,20 @@ app.layout = html.Div(
     ]
 )
 
-@app.callback(
+@app1.callback(
     Output('feature-dropdown', 'options'),
     Input('analysis-radio', 'value')
 )
 def update_feature_dropdown(selected_analysis):
     if selected_analysis == 'regression':
-        regression_model=['決策樹(R)','Linear_regression','C']
+        regression_model=['決策樹(R)','Linear_regression']
         return [{'label': f'{i}', 'value': f'{i}'} for i in regression_model]
     else:  # classification
-        classification_model=['決策樹(C)','Logisticregression','G']
+        classification_model=['決策樹(C)','Logisticregression']
         return [{'label': f'{i}', 'value': f'{i}'} for i in classification_model]
 
 
-@app.callback(
+@app1.callback(
     Output('k-line-chart', 'figure'),
     Output('macd-chart', 'figure'),
     Output('heatmap-chart', 'figure'),
@@ -323,7 +323,7 @@ def create_heatmap_chart(data):
     
     return fig
 
-@app.callback(
+@app1.callback(
     [Output('analysis-chart', 'figure'),
      Output('model-info', 'children')],
     Input('feature-dropdown', 'value')
@@ -368,4 +368,4 @@ def update_analysis_chart(selected_model):
         return fig, html.Div(info, style={'white-space': 'pre-line', 'font-family': 'monospace'})
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8077)
+    app1.run_server(debug=True)
